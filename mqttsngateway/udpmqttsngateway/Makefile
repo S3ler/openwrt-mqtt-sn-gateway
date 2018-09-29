@@ -19,7 +19,7 @@ define Package/mqttsngateway
   SECTION:=mqtt-sn
   CATEGORY:=MQTT-SN
   TITLE:=MQTT-SN Gateway
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +libstdcpp
   URL:=https://github.com/S3ler/mqtt-sn-gateway
 endef
 
@@ -31,6 +31,7 @@ endef
 # Package preparation instructions; create the build directory and copy the source code. 
 # The last command is necessary to ensure our preparation instructions remain compatible with the patching system.
 define Build/Prepare
+	rm -rf $(PKG_BUILD_DIR)
 	mkdir -p $(PKG_BUILD_DIR)
 	cp -r $(SOURCE_DIR)/* $(PKG_BUILD_DIR)
 	$(Build/Patch)
@@ -41,6 +42,7 @@ CORESRCS := \
 $(PKG_BUILD_DIR)/$(CORE_DIR)/CoreImpl.cpp \
 $(PKG_BUILD_DIR)/$(CORE_DIR)/Gateway.cpp \
 $(PKG_BUILD_DIR)/$(CORE_DIR)/MqttMessageHandlerInterface.cpp \
+$(PKG_BUILD_DIR)/$(CORE_DIR)/MqttSnMessageHandler.cpp \
 $(PKG_BUILD_DIR)/$(CORE_DIR)/PersistentInterface.cpp \
 $(PKG_BUILD_DIR)/$(CORE_DIR)/SocketInterface.cpp 
 
@@ -53,6 +55,7 @@ $(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/LinuxSystem.cpp
 
 MQTTCLIENT_DIR := paho/pahomqttembeddedc
 MQTTCLIENTSRCS := \
+$(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/paho/PahoMqttMessageHandler.cpp \
 $(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(MQTTCLIENT_DIR)/MQTTPacket/src/MQTTConnectClient.c \
 $(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(MQTTCLIENT_DIR)/MQTTPacket/src/MQTTConnectServer.c \
 $(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(MQTTCLIENT_DIR)/MQTTPacket/src/MQTTDeserializePublish.c \
@@ -84,8 +87,8 @@ $(MQTTCLIENTSRCS) \
 CSRCS := \
 $(CORESRCS) \
 $(IMPLEMENTATIONSRCS) \
-$(PKG_BUILD_DIR) \
 $(TRANSMISSIONPROTOCOLSRCS) \
+$(ARDUINOLINUXABSTRACTIONSRCS) \
 $(MAINSRCS) \
 $(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(MQTTCLIENT_DIR)/MQTTClient/src/linux/linux.cpp 
 
@@ -104,8 +107,7 @@ LDADD := -lpthread
 
 # Package build instructions; invoke the target-specific compiler to first compile the source file, and then to link the file into the final executable
 define Build/Compile
-	$(TARGET_CC) $(TARGET_CFLAGS) $(INCLUDES) -o $(patsubst %.cpp, %.o, $(CSRCS)) -c $(CSRCS) -o $(patsubst %.c, %.o, $(CRCS)) -c $(CRCS)
-	$(TARGET_CC) $(TARGET_LDFLAGS) -o $(PKG_BUILD_DIR)/$1 $(patsubst %.cpp, %.o, $(CSRCS)) $(patsubst %.c, %.o, $(CRCS))
+	$(TARGET_CXX) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -DGATEWAY_TRANSMISSION_PROTOCOL_UDP $(INCLUDES) -o $(PKG_BUILD_DIR)/$1 $(CSRCS) $(CRCS)
 endef
 
 # Package install instructions; create a directory inside the package to hold our executable, and then copy the executable we built previously into the folder
