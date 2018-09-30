@@ -33,7 +33,7 @@ Then upload the ikp.file to your your device and install:
 	root@OpenWrt:/# opkg install mqttsngateway1.0-1_<arch>.ipk
 
 Next add a `MQTT.CON` and a `MQTTSN.CON` file into your home-directory.
-Example [MQTT.CON](https://github.com/S3ler/linux-mqtt-sn-gateway/blob/master/cmake-build-debug/MQTT.CON) file:
+Example [MQTT.CON](https://github.com/S3ler/linux-mqtt-sn-gateway/blob/master/MQTT.CON) file:
 
 	brokeraddress 192.168.178.33
 	brokerport 1883
@@ -44,7 +44,7 @@ Example [MQTT.CON](https://github.com/S3ler/linux-mqtt-sn-gateway/blob/master/cm
 	willretain 0
 	gatewayid 2
 
-Example [MQTTSN.CON](https://github.com/S3ler/linux-mqtt-sn-gateway/blob/master/cmake-build-debug/MQTTSN.CON) file:
+Example [MQTTSN.CON](https://github.com/S3ler/linux-mqtt-sn-gateway/blob/master/MQTTSN.CON) file:
 
 	gatewayid 2
 	timeout 10
