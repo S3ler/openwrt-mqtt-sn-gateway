@@ -101,13 +101,13 @@ INCLUDES += \
 -I$(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(TRANSMISSION_PROTOCOL)/ \
 -I$(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(MQTTCLIENT_DIR)/MQTTPacket/src/ \
 -I$(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(MQTTCLIENT_DIR)/MQTTClient/src/ \
--I$(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(MQTTCLIENT_DIR)/MQTTClient/src/linux 
+-I$(PKG_BUILD_DIR)/$(IMPLEMENTATION_DIR)/$(MQTTCLIENT_DIR)/MQTTClient/src/linux
 
-LDADD := -lpthread
+LADD := -pthread
 
 # Package build instructions; invoke the target-specific compiler to first compile the source file, and then to link the file into the final executable
 define Build/Compile
-	$(TARGET_CXX) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -DGATEWAY_TRANSMISSION_PROTOCOL_UDP $(INCLUDES) -o $(PKG_BUILD_DIR)/$1 $(CSRCS) $(CRCS)
+	$(TARGET_CXX) $(TARGET_CFLAGS) -std=c++11 $(LADD) $(TARGET_LDFLAGS) -DGATEWAY_TRANSMISSION_PROTOCOL_UDP $(INCLUDES) -o $(PKG_BUILD_DIR)/$1 $(CSRCS) $(CRCS)
 endef
 
 # Package install instructions; create a directory inside the package to hold our executable, and then copy the executable we built previously into the folder
