@@ -1,5 +1,5 @@
 # Patching Dragino LoRa Gateway openwrt-cc-15.05 for building mqtt-sn-gateway
-When you try to build the Dragino LoRa Gateway OpenWRT firmware under newest linux version (e.g. Ubuntu 18.04 in my case) you need to apply some changes.
+When you try to build the [Dragino LoRa Gateway OpenWRT firmware](https://github.com/dragino/openwrt-cc-15.05) under newer linux version (e.g. Ubuntu 18.04 in my case) you need to apply some changes.
 
 The following files need to be adapted.
 	
@@ -59,29 +59,29 @@ the error is in file openwrt-cc-15.05/openwrt/include/prereq-build.mk
 
 ### openwrt/build_dir/host/automake-1.15/bin/automake.in
 
---- a/bin/automake.in
-+++ b/bin/automake.in
-@@ -3883,7 +3883,7 @@ sub substitute_ac_subst_variables_worker
- sub substitute_ac_subst_variables
- {
-   my ($text) = @_;
--  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
-+  $text =~ s/\$[{]([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
-   return $text;
- }
+	--- a/bin/automake.in
+	+++ b/bin/automake.in
+	@@ -3883,7 +3883,7 @@ sub substitute_ac_subst_variables_worker
+ 	sub substitute_ac_subst_variables
+ 	{
+	   my ($text) = @_;
+	-  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
+	+  $text =~ s/\$[{]([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
+	   return $text;
+	 }
 
 ### openwrt/build_dir/host/automake-1.15/bin/automake.tmp
 
---- a/bin/automake.tmp
-+++ b/bin/automake.tmp
-@@ -3938,7 +3938,7 @@ sub substitute_ac_subst_variables_worker
- sub substitute_ac_subst_variables
- {
-   my ($text) = @_;
--  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
-+  $text =~ s/\$[{]([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
-   return $text;
- }
+	--- a/bin/automake.tmp
+	+++ b/bin/automake.tmp
+	@@ -3938,7 +3938,7 @@ sub substitute_ac_subst_variables_worker
+ 	sub substitute_ac_subst_variables
+ 	{
+   	my ($text) = @_;
+	-  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
+	+  $text =~ s/\$[{]([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
+   	return $text;
+ 	}
 
 ### commands to build
 We a assume you habe the openwrt-mqtt-sn-gateway repository next to the current shell directory:
