@@ -1,5 +1,5 @@
 # openwrt-mqtt-sn-gateway
-tested with Ubuntu 18.04 x86_64.
+Tested and compiled with Ubuntu 18.04 x86_64.
 
 ## Build MQTT-SN Gateway
 
@@ -69,4 +69,5 @@ If everything worked correctly you should see:
 	0: Mqtt will loaded
 	0: Gateway ready
 	
-
+## Compile for Dragino LoRa Gateway
+[See the documentation to fix compile error under Ubunutu 18.04](openwrt-cc-15.05/README.md)
